@@ -8,88 +8,73 @@
 /**
  * 配置及公有属性
  **/
-var realWindowWidth = 0;
-var realWindowHeight = 0;
-wx.getSystemInfo({
+let realWindowWidth = 0;
+let realWindowHeight = 0;
+wx.getSystemInfoSync({
 	success: function (res) {
 		realWindowWidth = res.windowWidth
 		realWindowHeight = res.windowHeight
 	}
 })
+
 /**
  * 主函数入口区
  **/
 function html2wxml(data, target, imagePadding) {
-	var that = target,
-		images = [];
+	let images = target.data.images || [];
 
-	if (that.data.images != undefined) {
-		images = that.data.images;
-	}
+	data = {
+		nodes: data,
+		images,
+		view: {
+			imagePadding: typeof imagePadding !== 'undefined' ? Number(imagePadding) : 0,
+		}
+	};
 
-	data = { nodes: data, images: images };
-	data.view = {};
-	data.view.imagePadding = 0;
-	if (typeof (imagePadding) != 'undefined') {
-		data.view.imagePadding = imagePadding
-	}
-
-	that.setData(data);
-	that.wxmlImgLoad = wxmlImgLoad;
-	that.wxmlImgTap = wxmlImgTap;
+	target.setData(data);
+	target.wxmlImgLoad = wxmlImgLoad;
+	target.wxmlImgTap = wxmlImgTap;
 }
+
 // 图片点击事件
 function wxmlImgTap(e) {
-	var that = this;
-	var nowImgUrl = e.target.dataset.src;
+	let nowImgUrl = e.target.dataset.src;
+	let imageUrls = this.data.imageUrls;
 
-	var imageUrls = that.data.imageUrls,
-		newImageUrls = [];
-	for (var i in imageUrls) {
-		if (imageUrls[i] !== undefined) {
-			newImageUrls.push(imageUrls[i]);
-		}
-	}
-	if (newImageUrls.length > 0) {
-		wx.previewImage({
-			current: nowImgUrl,
-			urls: newImageUrls
-		})
-	}
+	imageUrls.length > 0 && wx.previewImage({
+		current: nowImgUrl,
+		urls: imageUrls
+	})
 }
 
 /**
  * 图片视觉宽高计算函数区 
+ * 假循环获取计算图片视觉最佳宽高
  **/
 function wxmlImgLoad(e) {
-	var that = this,
-		idx = e.target.dataset.idx;
+	let idx = e.target.dataset.idx;
+	let recal = wxAutoImageCal(e.detail.width, e.detail.height, this); // 因为无法获取view宽度 需要自定义padding进行计算
 
-	calMoreImageInfo(e, idx, that);
-}
-// 假循环获取计算图片视觉最佳宽高
-function calMoreImageInfo(e, idx, that) {
-
-	//因为无法获取view宽度 需要自定义padding进行计算
-	var recal = wxAutoImageCal(e.detail.width, e.detail.height, that);
-	that.setData({
+	e.currentTarget.dataset.src && this.setData({
 		['images[' + idx + ']']: { width: recal.imageWidth, height: recal.imageHeight },
 		['imageUrls[' + idx + ']']: e.currentTarget.dataset.src
-	})
+	});
 }
 
 // 计算视觉优先的图片宽高
 function wxAutoImageCal(originalWidth, originalHeight, that) {
-
 	// 获取图片的原始长宽
-	var windowWidth = 0, windowHeight = 0;
-	var autoWidth = 0, autoHeight = 0;
-	var results = {};
-	var padding = that.data.view.imagePadding;
-	windowWidth = realWindowWidth - 2 * padding;
-	windowHeight = realWindowHeight;
+	let padding = that.data.view.imagePadding;
+	let windowWidth = realWindowWidth - 2 * padding;
+	let windowHeight = realWindowHeight;
+	let autoWidth = 0;
+	let autoHeight = 0;
+	let results = {
+		imageWidth: originalWidth,
+		imageHeight: originalHeight,
+	};
 
-	// 判断按照那种方式进行缩放
+	// 判断按照哪种方式进行缩放
 	// 在图片width大于手机屏幕width时候
 	if (originalWidth > windowWidth) {
 		autoWidth = windowWidth;
@@ -97,11 +82,7 @@ function wxAutoImageCal(originalWidth, originalHeight, that) {
 		results.imageWidth = autoWidth;
 		results.imageHeight = autoHeight;
 	}
-	// 否则展示原来的数据
-	else {
-		results.imageWidth = originalWidth;
-		results.imageHeight = originalHeight;
-	}
+
 	return results;
 }
 
