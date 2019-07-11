@@ -1,4 +1,4 @@
-var html2wxml = require('html2wxml-main.js');
+let html2wxml = require('html2wxml-main.js');
 
 Component({
   data: {},
@@ -10,20 +10,21 @@ Component({
       type: String,
       value: null,
       observer: function(newVal, oldVal) {
-        if (newVal == '') return;
+        if (!newVal) return;
 
-        if (this.data.type == 'html' || this.data.type == 'markdown' || this.data.type == 'md') {
-          var data = {
+        if (this.data.type === 'html' || this.data.type === 'markdown' || this.data.type === 'md') {
+          let data = {
             text: this.data.text,
             type: this.data.type,
             highlight: this.data.highlight,
-            linenums: this.data.linenums
+            linenums: this.data.linenums,
           };
 
-          if (this.data.imghost != null) {
+          if (!this.data.imghost) {
             data.imghost = this.data.imghost;
           }
 
+          // TODO, should be a paramter.
           wx.request({
             url: 'https://www.qwqoffice.com/html2wxml/',
             data: data,
