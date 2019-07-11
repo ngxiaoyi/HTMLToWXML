@@ -1,8 +1,8 @@
 /**
- * Project: html2wxml
+ * Project: HTMLToWXML
  * Description: 将HTML、Markdown转为微信小程序WXML 
- * Author: 幻想小籽
- * Organization: QwqOffice (https://www.qwqoffice.com)
+ * Author: royslg
+ * Organization: weshine (https://www.wshoto.com)
  */
 
 @keyframes loading {
