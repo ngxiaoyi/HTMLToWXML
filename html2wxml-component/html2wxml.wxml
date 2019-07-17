@@ -46,7 +46,7 @@
 </view>
 
 <!-- 循环模版 -->
-
+<!-- HTML节点标签，匹配转换成wxml标签，大部分借用原生rich-text组件 -->
 <template name="wxml0">
     <!-- button 类型 -->
     <block wx:if="{{item.tag == 'button'}}">
@@ -118,6 +118,14 @@
             </block>
         </view>
     </block>
+    <!-- TODO, 改用官方rich-text组件  -->
+<!--     <block wx:else>
+        <view style="{{item.attr.style}}">
+            <block wx:for="{{item.nodes}}">
+                <rich-text nodes="{{[]}}"></rich-text>
+            </block>
+        </view>
+    </block> -->
 </template>
 
 <!-- 循环模版 -->
