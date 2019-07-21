@@ -1,0 +1,13 @@
+<!--common/component/RichText/RichText.wxml-->
+<view style="width: 100%; max-width: 750rpx;">
+  <block wx:for="{{nodes}}" wx:key="index">
+    <text>组件：{{item.name}}</text>
+    <rich-text nodes="{{[nodes[index]]}}" bindtap="tap"></rich-text>
+    <block wx:if="{{item.children}}">
+      <!-- <ws-rich-text nodes="{{nodes[0].children}}"></ws-rich-text> -->
+      <text>使用自定义组件循环渲染children</text>
+      <ws-rich-text nodes="{{item.children}}" bindtap="tap"></ws-rich-text>
+    </block>
+
+  </block>
+</view>

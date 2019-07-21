@@ -1,35 +1,23 @@
-// rich-text 官方富文本组件，缺点
-// 一些常用标签不支持，如section
-// 不能实现图片和链接的点击
-// 不支持音视频
-// 不支持解析style标签
-// 
-// 转换官方组件不支持的标签
-// //以u标签为例
-// case 'u':
-//     name = 'span';
-//     attrs.style = 'text-decoration:underline;' + attrs.style;
-//     break;
-// 
-// 顶层标签上加上user-select:text;-webkit-user-select 解决文本复制
-// 
-// 嵌套循环问题： 组件来解决层级深的问题
-
 let html2wxml = require('html2wxml-main.js');
-
+let util = require('../../../common/utils/util.js');
 Component({
   data: {},
   options: {
-    addGlobalClass: true
+    addGlobalClass: true,
   },
   properties: {
     text: {
       type: String,
       value: null,
       observer: function(newVal, oldVal) {
-        if (!newVal) return;
+        this.setData({ showLoading: true });
 
-        if (this.data.type === 'html' || this.data.type === 'markdown' || this.data.type === 'md') {
+        if (newVal == '') { this.setData({ showLoading: false }); return; }
+
+        if (this.data.type == 'html' || this.data.type == 'markdown' || this.data.type == 'md') {
+          // this.setData({
+          //   html: this.data.text,
+          // })
           let data = {
             text: this.data.text,
             type: this.data.type,
@@ -37,35 +25,34 @@ Component({
             linenums: this.data.linenums,
           };
 
-          if (!this.data.imghost) {
+          if (this.data.imghost != null) {
             data.imghost = this.data.imghost;
           }
 
-          // TODO, should be a paramter.
-          wx.request({
-            url: 'https://www.qwqoffice.com/html2wxml/',
+          util.request({
+            url: 'html2wxml/index/decode',
             data: data,
             method: 'POST',
             header: {
-              'content-type': 'application/x-www-form-urlencoded'
+              'content-type': 'application/x-www-form-urlencoded',
             },
             success: res => {
               html2wxml.html2wxml(res.data, this, this.data.padding);
-            }
-          })
+            },
+          });
         }
-      }
+      },
     },
     json: {
       type: Object,
       value: {},
       observer: function(newVal, oldVal) {
         html2wxml.html2wxml(this.data.json, this, this.data.padding);
-      }
+      },
     },
     type: {
       type: String,
-      value: 'html'
+      value: 'html',
     },
     highlight: {
       type: Boolean,
@@ -73,7 +60,7 @@ Component({
     },
     highlightStyle: {
       type: String,
-      value: 'darcula'
+      value: 'darcula',
     },
     linenums: {
       type: Boolean,
@@ -81,23 +68,23 @@ Component({
     },
     padding: {
       type: Number,
-      value: 5
+      value: 5,
     },
     imghost: {
       type: String,
-      value: null
+      value: null,
     },
     showLoading: {
       type: Boolean,
-      value: true
-    }
+      value: true,
+    },
   },
   methods: {
     wxmlTagATap: function(e) {
       this.triggerEvent('WxmlTagATap', {
-        src: e.currentTarget.dataset.src
+        src: e.currentTarget.dataset.src,
       });
-    }
+    },
   },
-  attached: function() {}
-})
+  attached: function() {},
+});
