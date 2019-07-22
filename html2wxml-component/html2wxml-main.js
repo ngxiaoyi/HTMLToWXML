@@ -19,9 +19,13 @@ wx.getSystemInfoSync({
 
 function getNodes(data) {
   data.forEach(item => {
-    item.name = item.tag;
-    item.attrs = item.attr;
-    item.children = item.nodes && getNodes(item.nodes);
+    if (item.tag !== '#text') {
+      item.name = item.tag;
+      item.attrs = item.attr;
+      item.children = item.nodes && getNodes(item.nodes);
+    } else {
+      item.type = 'text';
+    }
     delete item.tag;
     delete item.attr;
     delete item.nodes;
