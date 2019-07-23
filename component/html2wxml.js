@@ -1,3 +1,5 @@
+// 主要是处理HTML机构，转换成所需结构，渲染及递归逻辑交给依赖的核心组件。
+
 let html2wxml = require('html2wxml-main.js');
 let util = require('../../../common/utils/util.js');
 Component({
