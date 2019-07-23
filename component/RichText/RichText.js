@@ -48,6 +48,8 @@ Component({
   /**
    * 组件的属性列表
    */
+  // 组件调用，属性传递，进度条的第四步；
+  // 包含了node子节点的递归调用
   properties: {
     nodes: {
       type: Array,

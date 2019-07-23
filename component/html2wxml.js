@@ -32,6 +32,7 @@ Component({
           }
 
           // TODO, change back
+          // 获取接口返回的HTML解析结果，进度条的第一步；
           util.request({
             url: 'html2wxml/index/decode',
             data: data,

@@ -5,7 +5,9 @@
  * Organization: weshine (https://www.wshoto.com)
  */
 
+// TODO, 挪到js组件文件中
 function getNodes(data) {
+  // 这里可以记录节点数，用来当做组件进度处理
   data.forEach(item => {
     if (item.tag !== '#text') {
       item.name = item.tag;
@@ -30,14 +32,14 @@ function html2wxml(data, target, imagePadding) {
 
   // console.log(data);
   data = {
-    nodes: getNodes(data),
+    nodes: getNodes(data), // 获取节点针对原生组件rich-text的处理结果，进度条的第二步；
     images,
     view: {
       imagePadding: typeof imagePadding !== 'undefined' ? Number(imagePadding) : 0,
     }
   };
   console.log(data);
-  target.setData(data);
+  target.setData(data); // setData处理结果，可以对应进度条第三部。
 }
 
 module.exports = {
