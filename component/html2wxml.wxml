@@ -1,5 +1,5 @@
 <block wx:if="{{!nodes}}">
-  <!-- TODO, CHANGE TO PROGRESS BAR -->
+  <!-- TODO, CHANGE TO PROGRESS BAR，进度条可以分为四个步骤，节点数传给递归子组件 -->
   <view wx:if="{{showLoading}}" style="padding:20px 0;width:100%;display:flex;justify-content:center;align-items:center">
     <image class="loading" src="./images/loading.png"></image>
   </view>

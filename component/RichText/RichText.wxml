@@ -1,13 +1,13 @@
 <!-- 基础元素 -->
 <template name="wxmlVideo">
-  <view class="{{item.attr.class}} wxml-video" style="{{item.attr.style}}">
-    <video class="{{item.attr.class}}" src="{{item.attr.src}}" controls="{{item.attr.controls !== undefined ? true : false}}" loop="{{item.attr.loop !== undefined ? true : false}}" poster="{{item.attr.poster}}"></video>
+  <view class="{{item.attrs.class}} wxml-video" style="{{item.attrs.style}}">
+    <video class="{{item.attrs.class}}" src="{{item.attrs.src}}" controls="{{item.attrs.controls !== undefined ? true : false}}" loop="{{item.attrs.loop !== undefined ? true : false}}" poster="{{item.attrs.poster}}"></video>
   </view>
 </template>
 
 <template name="wxmlAudio">
-  <view class="{{item.attr.class}} wxml-audio" style="{{item.attr.style}}">
-    <audio class="{{item.attr.class}}" src="{{item.attr.src}}" controls="{{item.attr.controls !== undefined ? true : false}}" loop="{{item.attr.loop !== undefined ? true : false}}" poster="{{item.attr.poster}}" name="{{item.attr.name}}" author="{{item.attr.author}}"></audio>
+  <view class="{{item.attrs.class}} wxml-audio" style="{{item.attrs.style}}">
+    <audio class="{{item.attrs.class}}" src="{{item.attrs.src}}" controls="{{item.attrs.controls !== undefined ? true : false}}" loop="{{item.attrs.loop !== undefined ? true : false}}" poster="{{item.attrs.poster}}" name="{{item.attrs.name}}" author="{{item.attrs.author}}"></audio>
   </view>
 </template>
 
@@ -17,7 +17,7 @@
 
 <template name="wxmlLiType">
   <view class="wxml-li-type">
-    <view class="{{item.attr.class}} {{type !== 'number' ? 'wxml-li-' + type : ''}}">{{type === 'number' ? idx + 1 + '. ' : ''}}</view>
+    <view class="{{item.attrs.class}} {{type !== 'number' ? 'wxml-li-' + type : ''}}">{{type === 'number' ? idx + 1 + '. ' : ''}}</view>
   </view>
 </template>
 
@@ -30,24 +30,24 @@
   <!-- ul类型 -->
   <!-- rich-text组件搞定 TODO -->
   <block wx:elif="{{item.name === 'ul'}}">
-    <view class="{{item.attr.class}} wxml-ul wxml-block" style="{{item.attr.style}}"></view>
+    <view class="{{item.attrs.class}} wxml-ul wxml-block" style="{{item.attrs.style}}"></view>
   </block>
   <!-- ol类型 -->
   <!-- rich-text组件搞定 TODO -->
   <block wx:elif="{{item.name === 'ol'}}">
-    <view class="{{item.attr.class}} wxml-ol wxml-block" style="{{item.attr.style}}"></view>
+    <view class="{{item.attrs.class}} wxml-ol wxml-block" style="{{item.attrs.style}}"></view>
   </block>
   <!-- li类型 -->
   <block wx:elif="{{item.name === 'li'}}">
-    <view class="{{item.attr.class}} wxml-li" style="{{item.attr.style}}">
+    <view class="{{item.attrs.class}} wxml-li" style="{{item.attrs.style}}">
       <template is="wxmlLiType" data="{{item:item, idx:item.idx, type:type}}" />
-      <view class="{{item.attr.class}} wxml-li-text"></view>
+      <view class="{{item.attrs.class}} wxml-li-text"></view>
     </view>
   </block>
   <!-- a类型 -->
-  <!-- TODO，响应事件并提供样式优化支持 -->
+  <!-- TODO，响应事件并提供样式优化支持，需要立马搞定的 -->
   <block wx:elif="{{item.name === 'a'}}">
-    <view bindtap="wxmlTagATap" class="wxml-inline {{item.attr.class}} wxml-a" data-src="{{item.attr.href}}" style="{{item.attr.style}}"></view>
+    <view bindtap="wxmlTagATap" class="wxml-inline {{item.attrs.class}} wxml-a" data-src="{{item.attrs.href}}" style="{{item.attrs.style}}"></view>
   </block>
   <!-- video类型 -->
   <block wx:elif="{{item.name === 'video'}}">

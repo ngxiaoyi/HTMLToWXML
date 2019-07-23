@@ -1,6 +1,6 @@
 {
 	"component": true,
   "usingComponents": {
-    "ws-rich-text": "../RichText/RichText"
+    "ws-rich-text": "./RichText/RichText"
   }
 }
