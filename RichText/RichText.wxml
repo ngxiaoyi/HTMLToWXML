@@ -1,13 +1,107 @@
-<!--common/component/RichText/RichText.wxml-->
-<view style="width: 100%; max-width: 750rpx;">
-  <block wx:for="{{nodes}}" wx:key="index">
-    <text>组件：{{item.name}}</text>
-    <rich-text nodes="{{[nodes[index]]}}" bindtap="tap"></rich-text>
-    <block wx:if="{{item.children}}">
-      <!-- <ws-rich-text nodes="{{nodes[0].children}}"></ws-rich-text> -->
-      <text>使用自定义组件循环渲染children</text>
-      <ws-rich-text nodes="{{item.children}}" bindtap="tap"></ws-rich-text>
-    </block>
+<!-- 基础元素 -->
+<template name="wxmlVideo">
+  <view class="{{item.attr.class}} wxml-video" style="{{item.attr.style}}">
+    <video class="{{item.attr.class}}" src="{{item.attr.src}}" controls="{{item.attr.controls != undefined ? true : false}}" loop="{{item.attr.loop != undefined ? true : false}}" poster="{{item.attr.poster}}"></video>
+  </view>
+</template>
 
+<template name="wxmlAudio">
+  <view class="{{item.attr.class}} wxml-audio" style="{{item.attr.style}}">
+    <audio class="{{item.attr.class}}" src="{{item.attr.src}}" controls="{{item.attr.controls != undefined ? true : false}}" loop="{{item.attr.loop != undefined ? true : false}}" poster="{{item.attr.poster}}" name="{{item.attr.name}}" author="{{item.attr.author}}"></audio>
+  </view>
+</template>
+
+<template name="wxmlImg">
+  <image class="{{item.attrs.class}} wxml-img" data-src="{{item.attrs.src}}" src="{{item.attrs.src}}" data-idx="{{item.idx}}" bindload="wxmlImgLoad" bindtap="wxmlImgTap" mode="widthFix" style="width:{{images[item.idx].width}}px;{{item.attrs.style}}" />
+</template>
+
+<template name="wxmlLiType">
+  <view class="wxml-li-type">
+    <view class="{{item.attr.class}} {{type != 'number' ? 'wxml-li-' + type : ''}}">{{type === 'number' ? idx + 1 + '. ' : ''}}</view>
+  </view>
+</template>
+
+<template name="wxml0">
+  <!-- button 类型 -->
+  <block wx:if="{{item.name === 'button'}}">
+    <button type="default" size="mini">
+      <block wx:for="{{item.nodes}}" wx:key="">
+        <template is="wxml1" data="{{images:images, item:item}}" />
+      </block>
+    </button>
   </block>
-</view>
+  <!-- ul类型 -->
+  <block wx:elif="{{item.name === 'ul'}}">
+    <view class="{{item.attr.class}} wxml-ul wxml-block" style="{{item.attr.style}}">
+      <block wx:for="{{item.nodes}}" wx:key="">
+        <template is="wxml1" data="{{images:images, item:item, type:item.listtype != undefined ? item.listtype : 'circle'}}" />
+      </block>
+    </view>
+  </block>
+  <!-- ol类型 -->
+  <block wx:elif="{{item.name === 'ol'}}">
+    <view class="{{item.attr.class}} wxml-ol wxml-block" style="{{item.attr.style}}">
+      <block wx:for="{{item.nodes}}" wx:key="">
+        <template is="wxml1" data="{{images:images, item:item, type:item.listtype != undefined ? item.listtype : 'number'}}" />
+      </block>
+    </view>
+  </block>
+  <!-- li类型 -->
+  <block wx:elif="{{item.name === 'li'}}">
+    <view class="{{item.attr.class}} wxml-li" style="{{item.attr.style}}">
+      <template is="wxmlLiType" data="{{item:item, idx:item.idx, type:type}}" />
+      <view class="{{item.attr.class}} wxml-li-text">
+        <block wx:for="{{item.nodes}}" wx:key="">
+          <template is="wxml1" data="{{images:images, item:item}}" />
+        </block>
+      </view>
+    </view>
+  </block>
+  <!-- a类型 -->
+  <block wx:elif="{{item.name === 'a'}}">
+    <view bindtap="wxmlTagATap" class="wxml-inline {{item.attr.class}} wxml-a" data-src="{{item.attr.href}}" style="{{item.attr.style}}">
+      <block wx:for="{{item.nodes}}" wx:key="">
+        <template is="wxml1" data="{{images:images, item:item}}" />
+      </block>
+    </view>
+  </block>
+  <!-- video类型 -->
+  <block wx:elif="{{item.name === 'video'}}">
+    <template is="wxmlVideo" data="{{item:item}}" />
+  </block>
+  <!-- audio类型 -->
+  <block wx:elif="{{item.name === 'audio'}}">
+    <template is="wxmlAudio" data="{{item:item}}" />
+  </block>
+  <!-- img类型 -->
+  <block wx:elif="{{item.name === 'img'}}">
+    <!-- <text>{{item.attrs.class}} style: {{item.attrs.style}} {{item.idx}}</text> -->
+    <template is="wxmlImg" data="{{images:images, item:item}}" />
+  </block>
+  <!-- 纯文本类型 -->
+  <block wx:elif="{{item.name === '#text'}}">
+    <text>{{item.text}}</text>
+  </block>
+  <block wx:elif="{{item.name === 'br'}}">
+    <text>\n</text>
+  </block>
+  <!-- 其他类型 -->
+  <block wx:else>
+    <!-- <view class="{{item.attrs.class}} wxml-{{item.name}} wxml-{{item.type}}" style="{{item.attrs.style}}">
+      <rich-text nodes="{{[name: item.name, attrs: item.attrs]}}"></rich-text>
+    </view> -->
+  </block>
+</template>
+
+<!--common/component/RichText/RichText.wxml-->
+<!-- 作为递归操作的组件 -->
+<block wx:for="{{nodes}}" wx:key="index">
+  <!-- <text>组件：{{item.name}}</text> -->
+  <!-- <rich-text nodes="{{[nodes[index]]}}" bindtap="tap"></rich-text> -->
+  <template is="wxml0" data="{{images:images, item:item}}" />
+  <block wx:if="{{item.children}}">
+    <!-- <ws-rich-text nodes="{{nodes[0].children}}"></ws-rich-text> -->
+    <!-- 继续递归 -->
+    <ws-rich-text nodes="{{item.children}}" bindtap="tap"></ws-rich-text>
+  </block>
+</block>

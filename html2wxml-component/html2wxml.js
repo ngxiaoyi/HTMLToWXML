@@ -29,6 +29,7 @@ Component({
             data.imghost = this.data.imghost;
           }
 
+          // TODO, change back
           util.request({
             url: 'html2wxml/index/decode',
             data: data,
