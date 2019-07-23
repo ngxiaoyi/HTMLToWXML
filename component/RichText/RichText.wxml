@@ -80,9 +80,12 @@
   </block>
 
   <block wx:if="{{item.children}}">
-    <!-- 继续递归 -->
+    <!-- 继续递归 a或者其他标签 赋给ws-rich-text组件标签 -->
     <block wx:if="{{item.name === 'a'}}">
       <ws-rich-text bindtap="wxmlTagATap" nodes="{{item.children}}" data-src="{{item.attrs.href}}" class="{{item.attrs.class}} wxml-{{item.name || item.type}}" style="{{item.attrs.style || ''}}"></ws-rich-text>
+    </block>
+    <block wx:elif="{{item.name === 'table'}}">
+      <rich-text nodes="{{[nodes[index]]}}" class="{{item.attrs.class}}" style="{{item.attrs.style || ''}}"></rich-text>
     </block>
     <block wx:else>
       <ws-rich-text nodes="{{item.children}}" class="{{item.attrs.class}} wxml-{{item.name || item.type}}" style="{{item.attrs.style || ''}}"></ws-rich-text>
