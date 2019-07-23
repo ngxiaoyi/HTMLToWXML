@@ -1,5 +1,3 @@
-// 主要是处理HTML机构，转换成所需结构，渲染及递归逻辑交给依赖的核心组件。
-
 let html2wxml = require('html2wxml-main.js');
 let util = require('../../../common/utils/util.js');
 Component({
@@ -31,8 +29,7 @@ Component({
             data.imghost = this.data.imghost;
           }
 
-          // TODO, change back
-          // 获取接口返回的HTML解析结果，进度条的第一步；
+          // 获取进度条的第一步
           util.request({
             url: 'html2wxml/index/decode',
             data: data,
@@ -84,11 +81,12 @@ Component({
     },
   },
   methods: {
-    wxmlTagATap: function(e) {
-      this.triggerEvent('WxmlTagATap', {
-        src: e.currentTarget.dataset.src,
-      });
-    },
+    // wxmlTagATap: function(e) {
+    //   console.log('+++++++++++++++++');
+    //   this.triggerEvent('WxmlTagATap', {
+    //     src: e.currentTarget.dataset.src,
+    //   });
+    // },
   },
   attached: function() {},
 });

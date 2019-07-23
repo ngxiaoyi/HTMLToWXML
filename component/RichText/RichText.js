@@ -1,8 +1,9 @@
 // common/component/RichText/RichText.js
-var realWindowWidth = 0;
-var realWindowHeight = 0;
+let realWindowWidth = 0;
+let realWindowHeight = 0;
 wx.getSystemInfo({
   success: function (res) {
+    console.log('huoqu')
     realWindowWidth = res.windowWidth
     realWindowHeight = res.windowHeight
   }
@@ -10,8 +11,9 @@ wx.getSystemInfo({
 
 // 假循环获取计算图片视觉最佳宽高
 function calMoreImageInfo(e, idx, that) {
+
   //因为无法获取view宽度 需要自定义padding进行计算
-  var recal = wxAutoImageCal(e.detail.width, e.detail.height, that);
+  let recal = wxAutoImageCal(e.detail.width, e.detail.height, that);
   that.setData({
     ['images[' + idx + ']']: { width: recal.imageWidth, height: recal.imageHeight },
     ['imageUrls[' + idx + ']']: e.currentTarget.dataset.src
@@ -20,11 +22,12 @@ function calMoreImageInfo(e, idx, that) {
 
 // 计算视觉优先的图片宽高
 function wxAutoImageCal(originalWidth, originalHeight, that) {
+
   // 获取图片的原始长宽
-  var windowWidth = 0, windowHeight = 0;
-  var autoWidth = 0, autoHeight = 0;
-  var results = {};
-  var padding = that.data.view && that.data.view.imagePadding || 0;
+  let windowWidth = 0, windowHeight = 0;
+  let autoWidth = 0, autoHeight = 0;
+  let results = {};
+  let padding = that.data.view && that.data.view.imagePadding || 0;
   windowWidth = realWindowWidth - 2 * padding;
   windowHeight = realWindowHeight;
 
@@ -44,12 +47,12 @@ function wxAutoImageCal(originalWidth, originalHeight, that) {
   return results;
 }
 
+
+
 Component({
   /**
-   * 组件的属性列表
+   * 组件的属性列表，进度条第四步，包含node子节点的递归调用
    */
-  // 组件调用，属性传递，进度条的第四步；
-  // 包含了node子节点的递归调用
   properties: {
     nodes: {
       type: Array,
@@ -69,6 +72,8 @@ Component({
    */
   methods: {
     wxmlImgTap: function(e) {
+      // console.log(e);
+      // let that = this;
       let nowImgUrl = e.target.dataset.src;
       let imageUrls = this.data.imageUrls;
       let newImageUrls = [];
@@ -85,13 +90,16 @@ Component({
       }
     },
     wxmlImgLoad: function(e) {
+      // let that = this,
       let idx = e.target.dataset.idx;
       calMoreImageInfo(e, idx, this);
     },
+
     wxmlTagATap: function(e) {
+      // console
       this.triggerEvent('WxmlTagATap', {
         src: e.currentTarget.dataset.src,
       });
-    },
+    }
   }
 })

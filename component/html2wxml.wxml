@@ -5,5 +5,6 @@
   </view>
 </block>
 <block wx:else>
-  <ws-rich-text nodes="{{nodes}}" images="{{images}}"></ws-rich-text>
+  <!-- ws-rich-text 触发 WxmlTagATap 事件，调用wxmlTagATap方法 -->
+  <ws-rich-text nodes="{{nodes}}" images="{{images}}" bindWxmlTagATap="wxmlTagATap"></ws-rich-text>
 </block>

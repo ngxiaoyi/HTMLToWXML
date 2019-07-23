@@ -83,6 +83,7 @@
 
 .wxml-p {
     margin-bottom: 8px;
+    display: block;
 }
 
 .wxml-h1 {
@@ -220,7 +221,7 @@
 .wxml-img {
     background-color: #efefef;
     overflow: hidden;
-	max-width: 100%;
+    max-width: 100%;
 }
 
 .wxml-blockquote {
@@ -361,8 +362,9 @@
     border-right: 1px solid #e0e0e0;
 }
 
-/*@import "highlight-styles/darcula.wxss";
+
+/* @import "highlight-styles/darcula.wxss";
 @import "highlight-styles/default.wxss";
 @import "highlight-styles/dracula.wxss";
-@import "highlight-styles/tomorrow.wxss";*/
-/* TODO 加载 自定义*/
+@import "highlight-styles/tomorrow.wxss";
+@import "custom/custom.wxss"; */

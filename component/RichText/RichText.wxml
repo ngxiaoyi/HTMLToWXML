@@ -21,71 +21,78 @@
   </view>
 </template>
 
-<template name="wxml0">
-  <!-- button 类型 -->
-  <!-- TODO,  -->
-  <block wx:if="{{item.name === 'button'}}">
-    <button type="default" size="mini"></button>
-  </block>
-  <!-- ul类型 -->
-  <!-- rich-text组件搞定 TODO -->
-  <block wx:elif="{{item.name === 'ul'}}">
-    <view class="{{item.attrs.class}} wxml-ul wxml-block" style="{{item.attrs.style}}"></view>
-  </block>
-  <!-- ol类型 -->
-  <!-- rich-text组件搞定 TODO -->
-  <block wx:elif="{{item.name === 'ol'}}">
-    <view class="{{item.attrs.class}} wxml-ol wxml-block" style="{{item.attrs.style}}"></view>
-  </block>
-  <!-- li类型 -->
-  <block wx:elif="{{item.name === 'li'}}">
-    <view class="{{item.attrs.class}} wxml-li" style="{{item.attrs.style}}">
-      <template is="wxmlLiType" data="{{item:item, idx:item.idx, type:type}}" />
-      <view class="{{item.attrs.class}} wxml-li-text"></view>
-    </view>
-  </block>
-  <!-- a类型 -->
-  <!-- TODO，响应事件并提供样式优化支持，需要立马搞定的 -->
-  <block wx:elif="{{item.name === 'a'}}">
-    <view bindtap="wxmlTagATap" class="wxml-inline {{item.attrs.class}} wxml-a" data-src="{{item.attrs.href}}" style="{{item.attrs.style}}"></view>
-  </block>
-  <!-- video类型 -->
-  <block wx:elif="{{item.name === 'video'}}">
-    <template is="wxmlVideo" data="{{item:item}}" />
-  </block>
-  <!-- audio类型 -->
-  <block wx:elif="{{item.name === 'audio'}}">
-    <template is="wxmlAudio" data="{{item:item}}" />
-  </block>
-  <!-- img类型 -->
-  <block wx:elif="{{item.name === 'img'}}">
-    <!-- <text>{{item.attrs.class}} style: {{item.attrs.style}} {{item.idx}}</text> -->
-    <template is="wxmlImg" data="{{images:images, item:item}}" />
-  </block>
-  <!-- 纯文本类型 -->
-  <block wx:elif="{{item.name === '#text'}}">
-    <text>{{item.text}}</text>
-  </block>
-  <block wx:elif="{{item.name === 'br'}}">
-    <text>\n</text>
-  </block>
-  <!-- 其他类型 -->
-  <block wx:else>
-    <!-- <view class="{{item.attrs.class}} wxml-{{item.name}} wxml-{{item.type}}" style="{{item.attrs.style}}"> -->
-    <rich-text nodes="{{[name: item.name, attrs: item.attrs]}}"></rich-text>
-    <!-- </view> -->
-  </block>
-</template>
-
+<!-- 1. a，video，audio，img标签及其父节点自己响应，其余交给rich-text组件来， -->
 <!--common/component/RichText/RichText.wxml-->
 <!-- 作为递归操作的组件 -->
 <block wx:for="{{nodes}}" wx:key="index">
   <!-- <text>组件：{{item.name}}</text> -->
   <!-- <rich-text nodes="{{[nodes[index]]}}" bindtap="tap"></rich-text> -->
-  <template is="wxml0" data="{{images:images, item:item}}" />
-  <block wx:if="{{item.children}}">
+  <!-- <template is="wxml0" data="{{images:images, item:item}}" /> -->
+  <!-- TODO,  -->
+  <block wx:if="{{!item.children}}">
+    <block wx:if="{{item.name === 'button'}}">
+      <button type="default" size="mini"></button>
+    </block>
+    <!-- ul类型 -->
+    <!-- rich-text组件搞定 TODO -->
+    <block wx:elif="{{item.name === 'ul'}}">
+      <view class="{{item.attrs.class}} wxml-ul wxml-block" style="{{item.attrs.style}}"></view>
+    </block>
+    <!-- ol类型 -->
+    <!-- rich-text组件搞定 TODO -->
+    <block wx:elif="{{item.name === 'ol'}}">
+      <view class="{{item.attrs.class}} wxml-ol wxml-block" style="{{item.attrs.style}}"></view>
+    </block>
+    <!-- li类型 -->
+    <block wx:elif="{{item.name === 'li'}}">
+      <view class="{{item.attrs.class}} wxml-li" style="{{item.attrs.style}}">
+        <template is="wxmlLiType" data="{{item:item, idx:item.idx, type:type}}" />
+        <view class="{{item.attrs.class}} wxml-li-text"></view>
+      </view>
+    </block>
+    <!-- a类型 -->
+    <!-- TODO，响应事件并提供样式优化支持，需要立马搞定的 -->
+    <block wx:elif="{{item.name === 'a'}}">
+      <view bindtap="wxmlTagATap" class="wxml-inline {{item.attrs.class}} wxml-a" data-src="{{item.attrs.href}}" style="{{item.attrs.style}}"></view>
+    </block>
+    <!-- video类型 -->
+    <block wx:elif="{{item.name === 'video'}}">
+      <template is="wxmlVideo" data="{{item:item}}" />
+    </block>
+    <!-- audio类型 -->
+    <block wx:elif="{{item.name === 'audio'}}">
+      <template is="wxmlAudio" data="{{item:item}}" />
+    </block>
+    <!-- img类型 -->
+    <block wx:elif="{{item.name === 'img'}}">
+      <!-- <text>{{item.attrs.class}} style: {{item.attrs.style}} {{item.idx}}</text> -->
+      <template is="wxmlImg" data="{{images:images, item:item}}" />
+    </block>
+    <!-- 纯文本类型 -->
+    <block wx:elif="{{item.name === '#text'}}">
+      <text>{{item.text}}</text>
+    </block>
+    <block wx:elif="{{item.name === 'br'}}">
+      <text>\n</text>
+    </block>
+    <!-- 其他类型 -->
+    <block wx:else>
+      <view class="{{item.attrs.class}} wxml-{{item.name || item.type}}" style="{{item.attrs.style || ''}}">
+        <rich-text nodes="{{[nodes[index]]}}"></rich-text>
+      </view>
+    </block>
+  </block>
+
+   <block wx:if="{{item.children}}">
     <!-- <ws-rich-text nodes="{{nodes[0].children}}"></ws-rich-text> -->
     <!-- 继续递归 -->
-    <ws-rich-text nodes="{{item.children}}" bindtap="tap"></ws-rich-text>
+    <block wx:if="{{item.name === 'a'}}">
+      <!-- <view bindtap="wxmlTagATap" class="wxml-inline {{item.attrs.class}} wxml-a" data-src="{{item.attrs.href}}" style="{{item.attrs.style}}"></view> -->
+      <!-- <template is="wxml0" data="{{images:images, item:item}}" /> -->
+      <ws-rich-text bindtap="wxmlTagATap" nodes="{{item.children}}" data-src="{{item.attrs.href}}" class="{{item.attrs.class}} wxml-{{item.name || item.type}}" style="{{item.attrs.style || ''}}"></ws-rich-text>
+    </block>
+    <block wx:else>
+      <ws-rich-text nodes="{{item.children}}" class="{{item.attrs.class}} wxml-{{item.name || item.type}}" style="{{item.attrs.style || ''}}"></ws-rich-text>
+    </block>
   </block>
 </block>
