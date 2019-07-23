@@ -86,6 +86,10 @@ Component({
       let idx = e.target.dataset.idx;
       calMoreImageInfo(e, idx, this);
     },
-
+    wxmlTagATap: function(e) {
+      this.triggerEvent('WxmlTagATap', {
+        src: e.currentTarget.dataset.src,
+      });
+    },
   }
 })
