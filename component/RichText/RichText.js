@@ -96,10 +96,9 @@ Component({
     },
 
     wxmlTagATap: function(e) {
-      // console
-      this.triggerEvent('WxmlTagATap', {
+      this.triggerEvent('tagatap', {
         src: e.currentTarget.dataset.src,
-      });
+      }, { bubbles: true, composed: true });
     }
   }
 })

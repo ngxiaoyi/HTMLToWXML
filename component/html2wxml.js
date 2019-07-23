@@ -81,12 +81,11 @@ Component({
     },
   },
   methods: {
-    // wxmlTagATap: function(e) {
-    //   console.log('+++++++++++++++++');
-    //   this.triggerEvent('WxmlTagATap', {
-    //     src: e.currentTarget.dataset.src,
-    //   });
-    // },
+    onTagATap: function(e) {
+      this.triggerEvent('WxmlTagATap', {
+        src: e.detail.src,
+      });
+    },
   },
   attached: function() {},
 });

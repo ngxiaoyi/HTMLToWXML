@@ -25,10 +25,7 @@
 <!--common/component/RichText/RichText.wxml-->
 <!-- 作为递归操作的组件 -->
 <block wx:for="{{nodes}}" wx:key="index">
-  <!-- <text>组件：{{item.name}}</text> -->
   <!-- <rich-text nodes="{{[nodes[index]]}}" bindtap="tap"></rich-text> -->
-  <!-- <template is="wxml0" data="{{images:images, item:item}}" /> -->
-  <!-- TODO,  -->
   <block wx:if="{{!item.children}}">
     <block wx:if="{{item.name === 'button'}}">
       <button type="default" size="mini"></button>
@@ -53,7 +50,7 @@
     <!-- a类型 -->
     <!-- TODO，响应事件并提供样式优化支持，需要立马搞定的 -->
     <block wx:elif="{{item.name === 'a'}}">
-      <view bindtap="wxmlTagATap" class="wxml-inline {{item.attrs.class}} wxml-a" data-src="{{item.attrs.href}}" style="{{item.attrs.style}}"></view>
+      <text bindtap="wxmlTagATap" class="wxml-inline {{item.attrs.class}} wxml-a" data-src="{{item.attrs.href}}" style="{{item.attrs.style}}"></text>
     </block>
     <!-- video类型 -->
     <block wx:elif="{{item.name === 'video'}}">
@@ -65,11 +62,10 @@
     </block>
     <!-- img类型 -->
     <block wx:elif="{{item.name === 'img'}}">
-      <!-- <text>{{item.attrs.class}} style: {{item.attrs.style}} {{item.idx}}</text> -->
       <template is="wxmlImg" data="{{images:images, item:item}}" />
     </block>
     <!-- 纯文本类型 -->
-    <block wx:elif="{{item.name === '#text'}}">
+    <block wx:elif="{{item.name === '#text' || item.type === 'text'}}">
       <text>{{item.text}}</text>
     </block>
     <block wx:elif="{{item.name === 'br'}}">
@@ -83,12 +79,9 @@
     </block>
   </block>
 
-   <block wx:if="{{item.children}}">
-    <!-- <ws-rich-text nodes="{{nodes[0].children}}"></ws-rich-text> -->
+  <block wx:if="{{item.children}}">
     <!-- 继续递归 -->
     <block wx:if="{{item.name === 'a'}}">
-      <!-- <view bindtap="wxmlTagATap" class="wxml-inline {{item.attrs.class}} wxml-a" data-src="{{item.attrs.href}}" style="{{item.attrs.style}}"></view> -->
-      <!-- <template is="wxml0" data="{{images:images, item:item}}" /> -->
       <ws-rich-text bindtap="wxmlTagATap" nodes="{{item.children}}" data-src="{{item.attrs.href}}" class="{{item.attrs.class}} wxml-{{item.name || item.type}}" style="{{item.attrs.style || ''}}"></ws-rich-text>
     </block>
     <block wx:else>
